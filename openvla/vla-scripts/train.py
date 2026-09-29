@@ -7,7 +7,7 @@ distributed across GPUs (and nodes). By default, assumes that CUDA toolkit is >=
 
 Notes & Prerequisites:
     - If you want to set a custom location for all HF / TIMM artifacts --> `export HF_HOME="<PATH>"` *before* running!
-        => For example (add to end of .bashrc): `export HF_HOME="/mnt/fsx/skaramcheti/cache"`
+        => For example (add to end of .bashrc): `export HF_HOME="${HOME}/.cache/huggingface"`
     - If you want to suppress random Tensorflow logs --> `export TF_CPP_MIN_LOG_LEVEL=3`
 
 Run with:

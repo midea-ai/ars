@@ -12,7 +12,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from PIL import Image
 from pathlib import Path
-from typing import Annotated, Optional, List, Tuple
+from typing import Annotated, Optional, List, Tuple, Literal
 from mani_skill import MANISKILL_ROOT_DIR
 from mani_skill.utils.wrappers.record import RecordEpisode
 from mani_skill.examples.motionplanning.widowx.motionplanner import VLADataCollectWidowXArmMotionPlanningSolver
@@ -39,7 +39,7 @@ class Args:
     """
 
     obs_mode: Annotated[str, tyro.conf.arg(aliases=["-o"])] = "rgb+segmentation"
-    """Observation mode to use. Usually this is kept as 'none' as observations are not necesary to be stored, they can be replayed later via the mani_skill.trajectory.replay_trajectory script."""
+    """Observation mode to use. RGB observations are required when saving trajectory data."""
 
     num_traj: Annotated[int, tyro.conf.arg(aliases=["-n"])] = 5
     """Number of trajectories to generate"""
@@ -72,9 +72,12 @@ class Args:
     record_dir: str = os.path.join(MANISKILL_ROOT_DIR, "mp_collect")
     """Directory to save recorded trajectories"""
 
+    obj_set: Literal["train", "test", "all"] = "train"
+    """Object/asset split passed to env.reset(options={"obj_set": ...})."""
+
     num_procs: int = 1
-    """Number of processes for parallel trajectory replay (only for CPU backend)"""
-    """Number of processes to use to help parallelize the trajectory replay process. This uses CPU multiprocessing and only works with the CPU simulation backend at the moment."""
+    """Number of parallel trajectory collection processes (CPU backend only)"""
+    """Collection uses CPU multiprocessing; each process creates its own simulation environment."""
 
     plan_time_step: Optional[float] = None
     seed: int = 0
@@ -154,8 +157,10 @@ def _main(args, proc_id: int = 0, single_num: int = 0) -> str:
         try:
             start_solve_t = time.time(); print("start motionplanning!")
 
-            # normal
-            env_reset_options = {"obj_set": "train"}
+            # Select the environment asset split explicitly.  For mismatch
+            # collection, "all" avoids the MultiPlate train-only shortcut where
+            # the correct target is always the literal plate.
+            env_reset_options = {"obj_set": args.obj_set}
 
             # debug
             if args.debug:
@@ -177,6 +182,12 @@ def _main(args, proc_id: int = 0, single_num: int = 0) -> str:
             print("<<<<<<<Failure, Motion planning can not get a solution.>>>>>>>")
         else:
             success = res[-1]["success"].item()
+            if success:
+                # Conversion checks the last recorded info, which can precede
+                # the solver's final result. Filter here without changing the
+                # trajectory or advancing/evaluating the environment again.
+                recorded_infos = planner.data_collector.data_dict["info"]
+                success = bool(recorded_infos) and recorded_infos[-1]["success"].item()
             elapsed_steps = res[-1]["elapsed_steps"].item()
             solution_episode_lengths.append(elapsed_steps)
             if success:
