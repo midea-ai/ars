@@ -1,0 +1,32 @@
+# Agent runtime, visualization, and progress evaluation (Python 3.11).
+numpy==2.2.6
+pandas==3.0.5
+pyarrow==25.0.1
+Pillow==12.2.0
+PyYAML==6.0.3
+imageio[ffmpeg]==2.37.4
+imageio-ffmpeg==0.6.0
+matplotlib==3.11.2
+
+# Shared model and conversion dependencies, aligned with vLLM 0.19.1.
+# Install vLLM separately using the command in README.md.
+torch==2.10.0
+torchvision==0.25.0
+transformers==5.9.0
+huggingface-hub==1.16.4
+opencv-python-headless==4.13.0.92
+numba==0.61.2
+diffusers==0.37.1
+safetensors==0.7.0
+# Match LeRobot's platform selection and the PyTorch version above.
+torchcodec==0.10.0; sys_platform != "win32" and (sys_platform != "linux" or (platform_machine != "aarch64" and platform_machine != "arm64" and platform_machine != "armv7l")) and (sys_platform != "darwin" or platform_machine != "x86_64")
+
+# LeRobot v2.1 expects list-valued dataset columns. These companion versions
+# satisfy datasets 3.6.0 while sharing the inference environment.
+datasets==3.6.0
+fsspec==2025.3.0
+dill==0.3.8
+multiprocess==0.70.16
+
+# The converter writes the LeRobot v2.1 format consumed by the agent.
+lerobot @ git+https://github.com/huggingface/lerobot.git@0cf864870cf29f4738d3ade893e6fd13fbd7cdb5

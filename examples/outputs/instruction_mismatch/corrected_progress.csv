@@ -1,0 +1,26 @@
+frame_index,proposal_progress_points,current_progress_points,current_progress_normalized,is_model_output,edit_reason,source
+0,117,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+1,135,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+2,153,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+3,171,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+4,179,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+5,188,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+6,196,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+7,204,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+8,205,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+9,206,0,0,1,edit_0001: Wrong-target approach: robot approaches carrot instead of spoon. No task-relevant progress for wrong-object preparation. Flat at 0.,reward_agent
+10,207,0,0,1,edit_0002: Wrong-object grasp: robot grasps carrot instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+11,210,0,0,1,edit_0002: Wrong-object grasp: robot grasps carrot instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+12,213,0,0,1,edit_0002: Wrong-object grasp: robot grasps carrot instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+13,216,0,0,1,edit_0002: Wrong-object grasp: robot grasps carrot instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+14,218,0,0,1,edit_0003: Wrong-object lift and transport: robot lifts and transports carrot toward plate instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+15,218,0,0,1,edit_0003: Wrong-object lift and transport: robot lifts and transports carrot toward plate instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+16,217,0,0,1,edit_0003: Wrong-object lift and transport: robot lifts and transports carrot toward plate instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+17,216,0,0,1,edit_0003: Wrong-object lift and transport: robot lifts and transports carrot toward plate instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+18,214,0,0,1,edit_0003: Wrong-object lift and transport: robot lifts and transports carrot toward plate instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+19,213,0,0,1,edit_0003: Wrong-object lift and transport: robot lifts and transports carrot toward plate instead of spoon. No task progress for wrong-object manipulation. Flat at 0.,reward_agent
+20,211,0,0,1,edit_0004: Wrong-object placement: robot places carrot on plate instead of spoon. Spoon never touched. Task completely failed. Flat at 0.,reward_agent
+21,209,0,0,1,edit_0004: Wrong-object placement: robot places carrot on plate instead of spoon. Spoon never touched. Task completely failed. Flat at 0.,reward_agent
+22,269,0,0,1,edit_0004: Wrong-object placement: robot places carrot on plate instead of spoon. Spoon never touched. Task completely failed. Flat at 0.,reward_agent
+23,330,0,0,1,edit_0004: Wrong-object placement: robot places carrot on plate instead of spoon. Spoon never touched. Task completely failed. Flat at 0.,reward_agent
+24,391,0,0,1,edit_0004: Wrong-object placement: robot places carrot on plate instead of spoon. Spoon never touched. Task completely failed. Flat at 0.,reward_agent

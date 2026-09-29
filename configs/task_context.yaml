@@ -1,0 +1,66 @@
+# Reward-agent-only context bound to matching LeRobot task instructions.
+#
+# Each item is matched by exact task text after trimming leading/trailing
+# whitespace and folding repeated whitespace into a single space. Reference
+# media paths are resolved relative to this file.
+#
+# Each task item must define instruction_append, reference_examples, or both.
+# Reference examples require a non-empty description and one or more inputs;
+# currently supported input types are image and video. They do not require ids.
+#
+# Progress recommendations are optional. Embed them in descriptions with
+# [[progress:RATIO]], where RATIO is in [0, 1]. The runner multiplies each ratio
+# by progress.value_max_points before showing the description to the model.
+# Multiple progress markers may appear in one description. Omit all markers
+# when a reference should provide semantic guidance without numeric calibration.
+#
+# Reference videos have independent local temporal order. They do not carry
+# frame indices, timestamps, frame ranges, or coverage from the trajectory being
+# evaluated.
+items:
+  - task: "put both the alphabet soup and the tomato sauce in the basket"
+    instruction_append: |
+      Task-specific hints:
+      - alphabet soup: blue-and-orange can with alphabet-letter soup graphics.
+      - tomato sauce: red/green/white can with tomato pictures.
+
+  - task: "put both the alphabet soup and the cream cheese box in the basket"
+    instruction_append: |
+      Task-specific hints:
+      - alphabet soup: blue-and-orange can with alphabet-letter soup graphics.
+      - cream cheese: white rectangular box with a large purple-and-blue label.
+
+  - task: "put both the cream cheese box and the butter in the basket"
+    instruction_append: |
+      Task-specific hints:
+      - cream cheese: white rectangular box with a large purple-and-blue label.
+      - butter: red-orange rectangular box with a blue-and-white panel.
+
+  - task: "put the white mug on the left plate and put the yellow and white mug on the right plate"
+    instruction_append: |
+      Task-specific hints:
+      - Plate sides are robot-relative: white mug goes to robot-left (image right); yellow-and-white mug goes to robot-right (image left).
+
+  # Comprehensive template. Keep this block commented until the referenced
+  # image and video are real, curated assets available at the configured paths.
+  #
+  # - task: "<exact task instruction>"
+  #   instruction_append: |
+  #     Task-specific entity or goal-relation hints:
+  #     - manipulated entity: ...
+  #     - target relation: ...
+  #
+  #   reference_examples:
+  #     - inputs:
+  #         - type: video
+  #           path: reference_examples/<task_slug>/state_transition.mp4
+  #         - type: image
+  #           path: reference_examples/<task_slug>/final_state.png
+  #       description: |
+  #         The video begins at a meaningful intermediate state. Recommended
+  #         progress at the beginning is [[progress:0.35]].
+  #
+  #         The final video state and the accompanying image show the same
+  #         more advanced task-relevant relation. The manipulated entity has
+  #         advanced substantially but has not necessarily completed the full
+  #         task. Recommended progress is [[progress:0.70]].

@@ -1,0 +1,75 @@
+schema_version: 1
+name: default_bootstrap_challenge_then_progress
+common_prompt: prompts/common.md
+stages:
+  - id: bootstrap_observations
+    prompt: prompts/stages/bootstrap_observations.md
+    max_steps: 40
+    fresh_session: false
+    promote_observations_to_confirmed_on_complete: false
+    generation:
+      thinking_token_budget: 1024
+    tool_config:
+      inspect_visual:
+        mode: model
+        sample_every_n: model
+        crop: enabled
+    initial_media:
+      full_video: true
+    allowed_tools:
+      - read_robot_instruction
+      - read_metadata
+      - inspect_visual
+      - add_observations
+      - read_observations
+      - revise_observations
+      - complete_stage
+
+  - id: challenge_observations
+    prompt: prompts/stages/challenge_observations.md
+    max_steps: 60
+    fresh_session: true
+    generation:
+      thinking_token_budget: 1024
+    tool_config:
+      inspect_visual:
+        mode: model
+        sample_every_n: model
+        crop: enabled
+    allowed_tools:
+      - read_robot_instruction
+      - read_metadata
+      - inspect_visual
+      - add_observations
+      - read_observations
+      - confirm_observations
+      - revise_observations
+      - merge_observations
+      - complete_stage
+
+  - id: progress
+    prompt: prompts/stages/progress.md
+    max_steps: 40
+    fresh_session: false
+    generation:
+      thinking_token_budget: 8192
+    tool_config:
+      inspect_visual:
+        mode: model
+        sample_every_n: model
+        crop: enabled
+    initial_context:
+      progress_snapshot: true
+      progress_summary: true
+    allowed_tools:
+      - read_robot_instruction
+      - read_metadata
+      - read_progress
+      - summarize_progress
+      - inspect_visual
+      - read_observations
+      - edit_progress_segments
+      - calibrate_progress_curve
+      - validate_progress
+      - write_summary
+      - complete_stage

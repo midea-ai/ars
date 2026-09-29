@@ -1,0 +1,172 @@
+# Reward-agent harness config.
+#
+# Usage (run from the repository root):
+#   python -m agent.cli run \
+#     --case-dir data/example_case \
+#     --run-dir outputs/example_run \
+#     --config configs/config.yaml
+#
+vllm:
+  base_url: http://127.0.0.1:8000/v1
+  model: qwen3.6-27b
+  context_window: 262144
+  timeout_seconds: 1800
+  endpoint_groups:
+    # Client routing remains valid when vLLM was started manually. With
+    # --start-server these URLs must exactly match server.yaml HTTP ports.
+    - ports:
+        - 8000
+        - 8001
+      base_url_template: "http://127.0.0.1:{port}/v1"
+      max_concurrent: 2
+
+# Optional reward-agent-only text and reference examples bound to exact
+# normalized LeRobot task strings.
+task_context:
+  path: configs/task_context.yaml
+  require_all_matched: false
+
+# Use the episode's is_success field as required terminal-outcome ground truth.
+is_success_ground_truth:
+  enabled: false
+
+# Batch scheduler settings for run-batch.
+batch:
+  # Total attempts per episode. 3 means attempt_00, attempt_01, and attempt_02.
+  max_retries: 3
+  # Optional explicit LeRobot episode_index schedule. null runs every episode.
+  # For shell-generated shards, pass --episode-indices "$EPISODES" instead.
+  episode_indices: null
+
+# The OpenAI/vLLM request field `max_tokens` is produced from
+# generation.max_tokens_per_step during normal stage calls and
+# generation.max_tokens_final when a final-step request is used.
+generation:
+  max_tokens_per_step: 16384
+  max_tokens_final: 16384
+  reserved_output_tokens: 16384
+  # Neutral repetition penalties preserve the model sampling defaults.
+  presence_penalty: 0.0
+  frequency_penalty: 0.0
+  repetition_penalty: 1.0
+  # Fixed per-request vLLM sampling seed. This should show up in server logs as
+  # SamplingParams(..., seed=0, ...) instead of seed=None.
+  seed: 0
+  top_p: 1.0
+  top_k: 0
+  min_p: 0.0
+  thinking_token_budget: 1024
+  # Keep this in sync with the natural-language prefix of the vLLM
+  # --reasoning-config reasoning_end_str, before the closing </think>.
+  thinking_budget_forced_end_phrase: "Enough analysis; proceed with the next required tool call or concise result now."
+  chat_template_kwargs:
+    enable_thinking: true
+    preserve_thinking: true
+
+progress:
+  # Integer progress values live in [0, value_max_points]. Raising this from
+  # 100 to 1000 reduces quantization plateaus when small progress increases
+  # are interpolated across many frames.
+  value_max_points: 1000
+
+visual:
+  media_mode: video
+  max_attached_frames_per_call: 768
+  # Agent-facing trajectory and reference videos share this encoding FPS.
+  # Only trajectory videos carry original-frame indexing semantics.
+  agent_video_fps: 1
+  # Keep tile cells near original resolution; Qwen's image processor handles any
+  # final multimodal resize/budgeting after the harness attaches the tile.
+  tile_max_width: 4096
+  # Human-review visualization FPS for corrected_progress_review.mp4 only.
+  # null keeps the original video FPS when it can be inferred.
+  review_video_fps: null
+  # Controls external label bars on agent-facing visual evidence. video.frame
+  # also applies to the initial full_video attachment. Progress labels are
+  # never rendered during bootstrap_observations; the human-only review video
+  # remains controlled separately by review_video_fps and is not affected here.
+  external_label_bar:
+    enabled: true
+    video:
+      frame: false
+      progress: false
+    tile:
+      frame: true
+      progress: false
+
+workflow:
+  schema_version: 1
+  name: default_bootstrap_challenge_then_progress
+  common_prompt: prompts/common.md
+  stages:
+    - id: bootstrap_observations
+      prompt: prompts/stages/bootstrap_observations.md
+      max_steps: 40
+      fresh_session: false
+      promote_observations_to_confirmed_on_complete: false
+      generation:
+        thinking_token_budget: 1024
+      tool_config:
+        inspect_visual:
+          mode: model
+          sample_every_n: model
+          crop: enabled
+      initial_media:
+        full_video: true
+      allowed_tools:
+        - read_robot_instruction
+        - read_metadata
+        - inspect_visual
+        - add_observations
+        - read_observations
+        - revise_observations
+        - complete_stage
+
+    - id: challenge_observations
+      prompt: prompts/stages/challenge_observations.md
+      max_steps: 60
+      fresh_session: true
+      generation:
+        thinking_token_budget: 1024
+      tool_config:
+        inspect_visual:
+          mode: model
+          sample_every_n: model
+          crop: enabled
+      allowed_tools:
+        - read_robot_instruction
+        - read_metadata
+        - inspect_visual
+        - add_observations
+        - read_observations
+        - confirm_observations
+        - revise_observations
+        - merge_observations
+        - complete_stage
+
+    - id: progress
+      prompt: prompts/stages/progress.md
+      max_steps: 40
+      fresh_session: false
+      generation:
+        thinking_token_budget: 8192
+      tool_config:
+        inspect_visual:
+          mode: model
+          sample_every_n: model
+          crop: enabled
+      initial_context:
+        progress_snapshot: true
+        progress_summary: true
+      allowed_tools:
+        - read_robot_instruction
+        - read_metadata
+        - read_progress
+        - summarize_progress
+        - inspect_visual
+        - read_observations
+        - edit_progress_segments
+        - calibrate_progress_curve
+        - validate_progress
+        - write_summary
+        - complete_stage

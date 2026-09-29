@@ -1,0 +1,65 @@
+# Reward-agent managed vLLM server config.
+#
+# Usage (run from the repository root; replace placeholders before running):
+#   python -m agent.cli run-batch \
+#     --lerobot-root data/lerobot \
+#     --output-root "<OUTPUT_ROOT>" \
+#     --config configs/config.yaml \
+#     --start-server configs/server.yaml
+#
+# On a platform-started Ray cluster, add --num-nodes N (N > 1). The same
+# server_groups layout is launched independently on every selected GPU node.
+# In Ray mode gpu_ids are logical per-node slots and must be globally unique
+# across server_groups; their total count controls the Ray GPU reservation for
+# each node actor.
+
+# Managed startup uses a rolling window. Ready replicas remain running but no
+# longer consume a startup slot, so the next replica can begin loading.
+startup:
+  max_parallel_per_node: 16
+  all_ready_timeout_seconds: 3600
+  poll_interval_seconds: 2
+  shutdown_grace_seconds: 30
+
+server_groups:
+  - name: qwen3_6_27b
+    gpu_ids:
+      - 0
+      - 1
+    # HTTP ports are client-visible and must align exactly with config.yaml.
+    http_port_start: 8000
+    # Each replica owns a disjoint internal candidate block. For the current
+    # TP1 launch, preflight selects the first available port in that block.
+    # Reserve these ports separately from the Ray worker range (20000-29999),
+    # Kubernetes NodePort range (30000-32767), and Linux ephemeral ports.
+    vllm_port_base: 12000
+    vllm_port_block_size: 32
+    kind: vllm
+    # Replace <MODEL_PATH> with the absolute path to your Qwen3.6-27B weights.
+    model_path: "<MODEL_PATH>"
+    env:
+      VLLM_ENGINE_READY_TIMEOUT_S: "3600"
+    args:
+      --host: 0.0.0.0
+      --port: "{port}"
+      --served-model-name: qwen3.6-27b
+      --max-model-len: 262144
+      --gpu-memory-utilization: 0.90
+      --reasoning-parser: qwen3
+      --enable-auto-tool-choice: true
+      --tool-call-parser: qwen3_coder
+      --enable-prefix-caching: true
+      --reasoning-config:
+        reasoning_start_str: "<think>"
+        reasoning_end_str: "\nEnough analysis; proceed with the next required tool call or concise result now.</think>"
+      # Use the directory passed to --output-root, or an ancestor directory
+      # containing all generated media.
+      --allowed-local-media-path: "<OUTPUT_ROOT>"
+      --media-io-kwargs:
+        video:
+          num_frames: 768
+      --mm-processor-kwargs:
+        do_sample_frames: false
+        size:
+          shortest_edge: 4096
+          longest_edge: 157286400

@@ -1,0 +1,17 @@
+# Paths are relative to this file. Set batch_results to a completed agent batch.
+# Every dataset episode must have exactly one completed result across all shards.
+datasets:
+  - lerobot_root: ../data/lerobot/semantic_mismatch
+    batch_results:
+      - ../outputs/runs/example/batch_results.jsonl
+
+progress_source: artifact_normalized
+fpsr_epsilons: [0.0, 0.0001, 0.001, 0.005, 0.01]
+
+# Enable only when every canonical sample index is present in native outputs.
+sensitivity:
+  # Controls both fixed-frame analysis and the native failure upper tail.
+  enabled: false
+  max_frames: 8
+  # Uses all native outputs, with at least one point; only reported when enabled.
+  failure_top_frac: 0.05

@@ -1,0 +1,26 @@
+frame_index,proposal_progress_points,current_progress_points,current_progress_normalized,is_model_output,edit_reason,source
+0,126,0,0,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+1,142,3,0.0030000000000000001,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+2,158,7,0.0070000000000000001,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+3,174,10,0.01,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+4,199,13,0.012999999999999999,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+5,223,17,0.017000000000000001,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+6,247,20,0.02,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+7,272,23,0.023,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+8,297,27,0.027,1,"edit_0001: Approach phase: gripper approaches carrot from above, carrot stationary. Modest progress for task-relevant preparation without object state change.",reward_agent
+9,323,30,0.029999999999999999,1,edit_0002: Gripper closing phase: fingers close around carrot. Continued preparation before acquisition complete.,reward_agent
+10,348,47,0.047,1,edit_0002: Gripper closing phase: fingers close around carrot. Continued preparation before acquisition complete.,reward_agent
+11,363,63,0.063,1,edit_0002: Gripper closing phase: fingers close around carrot. Continued preparation before acquisition complete.,reward_agent
+12,378,80,0.080000000000000002,1,"edit_0003: Grasp acquisition complete: tight 2-frame boundary where gripper is fully closed around carrot. Main acquisition jump (253 points) for control established. Subgoal 1/3 complete, progress ≤ 333.",reward_agent
+13,393,333,0.33300000000000002,1,"edit_0004: Outcome evidence: gripper closed around carrot, carrot still on table. Plateau - no new task state change.",reward_agent
+14,407,333,0.33300000000000002,1,edit_0005: Lift phase: carrot lifted off table and held. Gradual progress increase for first task-relevant state change after acquisition.,reward_agent
+15,425,366,0.36599999999999999,1,edit_0005: Lift phase: carrot lifted off table and held. Gradual progress increase for first task-relevant state change after acquisition.,reward_agent
+16,443,400,0.40000000000000002,1,"edit_0006: Transport phase: carrot carried toward plate. Gradual progress for sustained controlled motion advancing toward target. Subgoal 2/3 approaching, progress ≤ 667.",reward_agent
+17,462,440,0.44,1,"edit_0006: Transport phase: carrot carried toward plate. Gradual progress for sustained controlled motion advancing toward target. Subgoal 2/3 approaching, progress ≤ 667.",reward_agent
+18,469,480,0.47999999999999998,1,"edit_0006: Transport phase: carrot carried toward plate. Gradual progress for sustained controlled motion advancing toward target. Subgoal 2/3 approaching, progress ≤ 667.",reward_agent
+19,476,520,0.52000000000000002,1,"edit_0006: Transport phase: carrot carried toward plate. Gradual progress for sustained controlled motion advancing toward target. Subgoal 2/3 approaching, progress ≤ 667.",reward_agent
+20,483,560,0.56000000000000005,1,"edit_0006: Transport phase: carrot carried toward plate. Gradual progress for sustained controlled motion advancing toward target. Subgoal 2/3 approaching, progress ≤ 667.",reward_agent
+21,490,600,0.59999999999999998,1,edit_0007: Place phase: carrot placed on plate surface. Task complete - carrot rests on plate. Final progress 1000 for visibly complete task condition.,reward_agent
+22,605,733,0.73299999999999998,1,edit_0007: Place phase: carrot placed on plate surface. Task complete - carrot rests on plate. Final progress 1000 for visibly complete task condition.,reward_agent
+23,719,867,0.86699999999999999,1,edit_0007: Place phase: carrot placed on plate surface. Task complete - carrot rests on plate. Final progress 1000 for visibly complete task condition.,reward_agent
+24,833,1000,1,1,edit_0007: Place phase: carrot placed on plate surface. Task complete - carrot rests on plate. Final progress 1000 for visibly complete task condition.,reward_agent
